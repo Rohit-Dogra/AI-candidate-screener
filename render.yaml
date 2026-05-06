@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: screeniq-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python manage.py migrate
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: USE_SQLITE
+        value: false
+      - key: USE_MOCK_AI
+        value: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: screeniq-db
+          property: connectionString
+
+databases:
+  - name: screeniq-db
+    databaseName: screeniq
+    user: screeniq
