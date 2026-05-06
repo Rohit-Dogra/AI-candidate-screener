@@ -20,12 +20,12 @@ ScreenIQ is a lightweight internal HR screening tool built with a Django REST AP
 │   ├── screenings/
 │   ├── requirements.txt
 │   └── manage.py
-├── frontend/
-│   ├── src/app/screen/page.tsx
-│   ├── src/app/dashboard/page.tsx
-│   └── src/lib/
-├── .env.example
-└── README.md
+    ├── frontend/
+    │   ├── src/app/screen/page.tsx
+    │   ├── src/app/dashboard/page.tsx
+    │   └── src/lib/
+    ├── .env.example
+    └── README.md
 ```
 
 ## Setup Guide

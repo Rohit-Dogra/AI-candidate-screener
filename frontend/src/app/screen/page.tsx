@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/lib/api";
 import { normalizeScore } from "@/lib/score";
 
+const IS_MOCK = true;
+
 type StreamingState = {
   raw: string;
   score?: number;
@@ -256,12 +258,10 @@ export default function ScreenPage() {
 
             {profileOpen && (
               <>
-                {/* Backdrop */}
                 <div
                   onClick={() => setProfileOpen(false)}
                   style={{ position: "fixed", inset: 0, zIndex: 20 }}
                 />
-                {/* Dropdown */}
                 <div
                   className="fade-up"
                   style={{
@@ -277,7 +277,6 @@ export default function ScreenPage() {
                     overflow: "hidden",
                   }}
                 >
-                  {/* Profile info */}
                   <div style={{ padding: "16px", borderBottom: "1px solid #f0f2f8", display: "flex", alignItems: "center", gap: "12px" }}>
                     <div
                       style={{
@@ -301,8 +300,6 @@ export default function ScreenPage() {
                       <div style={{ fontSize: "11px", color: "#9097a8", marginTop: "2px" }}>HR Account</div>
                     </div>
                   </div>
-
-                  {/* Logout */}
                   <button className="logout-btn" onClick={handleLogout}>
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -318,7 +315,6 @@ export default function ScreenPage() {
         </header>
 
         <main style={{ padding: "28px 28px", flex: 1 }}>
-          {/* Page title */}
           <div style={{ marginBottom: "22px" }}>
             <h1 style={{ fontSize: "20px", fontWeight: 700, color: "#1a1d2e", marginBottom: "6px" }}>
               Screen a candidate
@@ -499,6 +495,45 @@ export default function ScreenPage() {
                     </span>
                   </div>
 
+                  {/* ── Demo mode banner ── */}
+                  {IS_MOCK && (
+                    <div
+                      style={{
+                        padding: "10px 24px",
+                        background: "#fffbeb",
+                        borderBottom: "1px solid #fde68a",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: "9px",
+                        fontSize: "12px",
+                        color: "#92400e",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        style={{ flexShrink: 0, marginTop: "1px" }}
+                      >
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      <span>
+                        <strong>Demo mode active</strong> — The AI screening engine is not connected yet.
+                        A real API key is required to generate live scores. The result below is a
+                        placeholder response returned by the mock fallback, so scores and analysis
+                        may not reflect the actual candidate or job description.
+                      </span>
+                    </div>
+                  )}
+
                   {/* Score bar */}
                   <div style={{ padding: "16px 24px", borderBottom: "1px solid #f0f2f8" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
@@ -550,4 +585,95 @@ export default function ScreenPage() {
                               width: "6px",
                               height: "6px",
                               borderRadius: "50%",
-                         
+                              background: "#4f46e5",
+                              marginTop: "7px",
+                              flexShrink: 0,
+                            }}
+                          />
+                          {reason}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                /* Streaming preview */
+                <div style={{ padding: "20px 24px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px" }}>
+                    <span
+                      className="pulse"
+                      style={{
+                        display: "inline-block",
+                        width: "8px",
+                        height: "8px",
+                        borderRadius: "50%",
+                        background: "#4f46e5",
+                      }}
+                    />
+                    <span style={{ fontSize: "13px", color: "#9097a8" }}>Streaming AI response…</span>
+                    {previewScore !== undefined && (
+                      <span
+                        style={{
+                          marginLeft: "auto",
+                          background: scoreBadge(previewScore).bg,
+                          color: scoreBadge(previewScore).color,
+                          fontSize: "11px",
+                          fontWeight: 600,
+                          padding: "3px 10px",
+                          borderRadius: "99px",
+                        }}
+                      >
+                        Provisional: {previewScore}/10
+                      </span>
+                    )}
+                  </div>
+
+                  {previewReasons.length > 0 && (
+                    <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "7px", marginBottom: "14px" }}>
+                      {previewReasons.map((r, i) => (
+                        <li
+                          key={i}
+                          style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontSize: "13px", color: "#9097a8" }}
+                        >
+                          <span
+                            style={{
+                              width: "5px",
+                              height: "5px",
+                              borderRadius: "50%",
+                              background: "#c7c9e0",
+                              marginTop: "6px",
+                              flexShrink: 0,
+                            }}
+                          />
+                          {r}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  <div
+                    style={{
+                      background: "#fafbff",
+                      border: "1px solid #e8eaf2",
+                      borderRadius: "8px",
+                      padding: "12px 14px",
+                      fontFamily: "monospace",
+                      fontSize: "12px",
+                      color: "#9097a8",
+                      lineHeight: 1.6,
+                      wordBreak: "break-all" as const,
+                      maxHeight: "120px",
+                      overflowY: "auto" as const,
+                    }}
+                  >
+                    {streaming.raw || "…"}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+}

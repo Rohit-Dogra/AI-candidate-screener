@@ -6,8 +6,8 @@ from decimal import Decimal
 from openai import OpenAI
 
 MOCK_RESPONSE = json.dumps({
-    "candidate_name": "Demo Candidate",
-    "score": "7.5",
+    "candidate_name": "Candidate",
+    "score": "8.5",
     "reasons": [
         "Strong technical skills matching job requirements.",
         "Relevant experience in the required domain.",
