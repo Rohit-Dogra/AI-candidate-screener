@@ -7,7 +7,7 @@ from openai import OpenAI
 
 MOCK_RESPONSE = json.dumps({
     "candidate_name": "Candidate",
-    "score": "8.5",
+    "score": "7.5",
     "reasons": [
         "Strong technical skills matching job requirements.",
         "Relevant experience in the required domain.",
